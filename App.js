@@ -4,28 +4,33 @@ import { Animated, TouchableOpacity, StyleSheet, Text, View } from 'react-native
 export default class App extends Component {
     state = {
         deg1: '0deg',
-        deg2: '200deg',
-        rotateAnimation: new Animated.Value(0)
+        deg2: '0deg',
+        rotateAnimation: new Animated.Value(0),
+        toRight: true
     }
 
     rotateAnimationHandler = () => {
+        this.state.toRight
+            ? this.setState({deg1: '0deg', deg2: '200deg'})
+            : this.setState({deg1: '180deg', deg2: '-20deg'})
+
         Animated.timing(this.state.rotateAnimation, {
             toValue: 1,
             duration: 400,
             useNativeDriver: true
         }).start(() => {
             this.setState({
-                deg1: '180deg',
+                deg1: this.state.toRight ? '180deg' : '0deg'
             })
             Animated.timing(this.state.rotateAnimation, {
                 toValue: 0,
                 duration: 400,
                 useNativeDriver: true
             }).start(() => {
+                let switcher = !this.state.toRight
                 this.setState({
-                    deg1: '0deg',
-                    deg2: '200deg',
-                    rotateAnimation: new Animated.Value(0)
+                    rotateAnimation: new Animated.Value(0),
+                    toRight: switcher
                 })
             })
         })
